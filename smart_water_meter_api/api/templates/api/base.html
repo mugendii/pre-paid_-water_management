@@ -1,0 +1,31 @@
+<!-- base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Smart Water Meter{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="dropdown">
+                
+                <a href="javascript:void(0)" class="dropbtn" >|||</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'register' %}">Register Tenant</a>
+                    <a href="{% url 'payment' %}">Make Payment</a>
+                    <a href="{% url 'esp' %}">ESP Endpoint</a>
+                    <a href="{% url 'room_meter_association' %}">Room-Meter Association</a>
+                    <a href="{% url 'enter_meter_number' %}">Enter Meter Number</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

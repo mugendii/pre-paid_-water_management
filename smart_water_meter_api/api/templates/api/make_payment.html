@@ -1,0 +1,13 @@
+<!-- make_payment.html -->
+{% extends 'api/base.html' %}
+
+{% block title %}Make Payment{% endblock %}
+
+{% block content %}
+    <h1>Make Payment</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Pay">
+    </form>
+{% endblock %}
