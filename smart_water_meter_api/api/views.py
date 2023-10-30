@@ -6,9 +6,17 @@ from rest_framework.decorators import api_view
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.views.generic import TemplateView
-
-from .models import Payment, RoomMeterAssociation, Meter, Tenant
-from .forms import TenantRegistrationForm, PaymentForm, RoomMeterAssociationForm, Tenant, MeterForm
+from django.shortcuts import render
+from django.shortcuts import redirect
+import simplejson as json
+from .utils import generate_order_number, check_callback
+from django.http import HttpResponse
+import requests
+import time
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import Payment, RoomMeterAssociation, Meter, Tenant, Order, Payment, OrderedTokens
+from .forms import TenantRegistrationForm, RoomMeterAssociationForm, Tenant, MeterForm, OrderForm
 
 
 class HomeView(TemplateView):
@@ -41,20 +49,6 @@ def register_tenant(request):
         form = TenantRegistrationForm()
 
     return render(request, 'api/register_tenant.html', {'form': form})
-
-def make_payment(request):
-    if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            # Handle the payment and solenoid valve control here
-            payment = form.save()
-            # Update meter values, send signals to ESP, etc.
-            return redirect('home')
-
-    else:
-        form = PaymentForm()
-
-    return render(request, 'api/make_payment.html', {'form': form})
 
 
 
@@ -102,3 +96,106 @@ def enter_meter_number(request):
         form = MeterForm()
 
     return render(request, 'api/enter_meter_number.html', {'form': form})
+
+
+
+def place_order(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = Order()
+            order.first_name = form.cleaned_data['first_name']
+            order.last_name = form.cleaned_data['last_name']
+            order.email = form.cleaned_data['email']
+            order.phone = form.cleaned_data['phone']
+            order.user = request.user
+            order.payment_method = request.POST['payment_method']
+            order.save()
+            order.order_number = generate_order_number(order.id)
+            order.save()
+            context ={
+                'order': order,
+            }
+            return render(request, 'api/place_order.html', context)
+        
+            
+                    
+        else:
+            print(form.errors)
+        
+    return render(request, 'api/error.html')
+
+
+
+def payments(request):
+        # check if request is ajax or not
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            # get the payment method
+            order_number = request.POST.get('order_number')
+            transaction_id = request.POST.get('transaction_id')
+            payment_method = request.POST.get('payment_method')
+            quantity = request.POST.get('quantity')
+            price = request.POST.get('price')
+            status = request.POST.get('status')
+            print(order_number, transaction_id, payment_method, status)
+            
+            order = Order.objects.get(order_number=order_number, user=request.user)
+            
+            payment = Payment(
+                user = request.user,
+                transaction_id = transaction_id,
+                payment_method = payment_method,
+                amount = order.total,
+                status = status   
+            )
+            payment.save()
+            
+            order.payment = payment
+            order.is_ordered = True
+            order.save()
+            
+            # TODO add metre number association with room here
+            # room_number = Cart.objects.filter(user=request.user)
+            
+        
+            ordered_tokens = OrderedTokens()
+            ordered_tokens.order = order
+            ordered_tokens.payment = payment
+            ordered_tokens.user = request.user
+        
+            ordered_tokens.quantity = quantity
+            ordered_tokens.price = price
+            ordered_tokens.amount = price * quantity
+            ordered_tokens.save()
+        
+            
+
+            response ={
+                'order_number': order.order_number,
+                'transaction_id': transaction_id,
+            }
+            
+            return JsonResponse(response)
+        
+
+        return HttpResponse('payment successful')
+    
+def order_complete(request):
+    order_number = request.GET.get('order_no')
+    transaction_id = request.GET.get('trans_id')
+    
+    try:
+        order = Order.objects.get(order_number=order_number, payment__transaction_id=transaction_id, is_ordered=True)
+        ordered_tokens = OrderedTokens.objects.filter(order=order)
+        subtotal = 0
+        for item in ordered_tokens:
+            subtotal += item.price * item.quantity
+        context={
+            'order': order,
+            'ordered_food': ordered_tokens,
+            'to_email': order.email,
+        }
+        return render(request, 'api/order_complete.html',context)
+    except:
+        return redirect('api/home.html')
+    return render(request, 'api/order_complete.html')
