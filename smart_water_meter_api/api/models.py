@@ -31,10 +31,6 @@ class Payment(models.Model):
     def __str__(self):
         return self.transaction_id
 
-# class Order(models.Model):
-#     tenant = models.ForeignKey('Tenant', on_delete=models.CASCADE)
-#     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
-#     payment_date = models.DateTimeField()
 
 
 class Order(models.Model):
@@ -48,7 +44,7 @@ class Order(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
-    order_number = models.CharField(max_length=100)
+    order_number = models.IntegerField(default=1000)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, blank=True)
@@ -64,7 +60,15 @@ class Order(models.Model):
     def name(self):
         return f'{self.first_name} {self.last_name}'
 
-    #  
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            # Calculate the next order number
+            last_order = Order.objects.order_by('-order_number').first()
+            if last_order:
+                self.order_number = last_order.order_number + 1
+            else:
+                self.order_number = 1000
+        super(Order, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.order_number
@@ -77,8 +81,10 @@ class OrderedTokens(models.Model):
     quantity = models.IntegerField()
     price = models.FloatField()
     amount = models.FloatField()
+    order_number = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.amount

@@ -103,29 +103,30 @@ def place_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            order = Order()
-            order.first_name = form.cleaned_data['first_name']
-            order.last_name = form.cleaned_data['last_name']
-            order.email = form.cleaned_data['email']
-            order.phone = form.cleaned_data['phone']
-            order.user = request.user
-            order.payment_method = request.POST['payment_method']
-            order.save()
-            order.order_number = generate_order_number(order.id)
-            order.save()
-            context ={
-                'order': order,
-            }
-            return render(request, 'api/place_order.html', context)
-        
-            
-                    
-        else:
-            print(form.errors)
-        
-    return render(request, 'api/error.html')
+            # Create an Order object with the form data
+            order = form.save()
+            return render(request, 'api/confirm_order.html', {'order': order})
+    else:
+        form = OrderForm()
+    return render(request, 'api/place_order.html', {'form': form})
 
+def confirm_order(request):
+    if request.method == 'POST' and 'pay_now' in request.POST:
+        # Get the order ID from the form data
+        order_id = request.POST.get('order_id')
 
+        # Retrieve the Order object based on the ID
+        order = Order.objects.get(id=order_id)
+
+        # For simplicity, you can assume the payment is successful
+        # and update the order status
+        order.status = 'Success'
+        order.save()
+
+        # Redirect to a thank you page or any other relevant page
+        return redirect('home')
+
+    return render(request, 'api/confirm_order.html')
 
 def payments(request):
         # check if request is ajax or not

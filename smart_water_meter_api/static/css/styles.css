@@ -49,6 +49,7 @@ nav {
     left: 0;
     width: 100%;
     z-index: 100; /* Ensures the navigation bar is above other content */
+    height: 40px;
 }
 
 /* Style the list inside the navigation bar */
@@ -61,7 +62,7 @@ nav ul {
 
 /* Style the list items */
 nav ul li {
-    margin-right: 200px;
+    margin-right: 20px;
 }
 a{
     background-color: #0077b6;
