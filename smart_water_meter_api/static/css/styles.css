@@ -1,7 +1,7 @@
 /* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    background: linear-gradient(to bottom, #0074D9, #3498DB, #6BBBFF);
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,6 +21,10 @@ body {
 h1 {
     color: #0077b6;
 }
+
+/* h2 {
+    color: #d6dcdf;
+} */
 
 p {
     font-size: 18px;
@@ -42,37 +46,58 @@ input[type="submit"] {
 }
 /* Add this CSS to your styles.css or a separate CSS file */
 /* Style the navigation bar */
+/* Style the navigation bar */
+/* Style the navigation bar */
 nav {
     background-color: #0077b6;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100; /* Ensures the navigation bar is above other content */
+    z-index: 100;
     height: 40px;
+}
+
+/* Style the dropbtn */
+nav .dropbtn {
+    background-color: #0077b6; /* Background color for the button */
+    color: white; /* Text color for the button */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for the button */
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer; /* Change cursor to a pointer on hover */
+}
+
+/* Change color on hover for the dropbtn */
+nav .dropbtn:hover {
+    background-color: #005691; /* Change background color on hover */
 }
 
 /* Style the list inside the navigation bar */
 nav ul {
     list-style: none;
     padding: 0;
-    display: flex; /* Make the list items horizontal */
-    justify-content: space-between; /* Distribute list items evenly */
+    display: flex;
+    justify-content: space-between;
 }
 
 /* Style the list items */
 nav ul li {
-    margin-right: 20px;
+    margin-right: 20px; /* Adjust the spacing as needed */
 }
-a{
+
+a {
     background-color: #0077b6;
     color: white;
-    padding: 20px;
+    padding: 10px 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     text-decoration: none;
 }
+
 /* Style the "Navigation" dropdown link */
 nav .dropdown a {
     color: white;
@@ -87,6 +112,7 @@ nav .dropdown-content {
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    right: 0; /* Adjust the positioning to the left */
 }
 
 /* Style the dropdown links */
@@ -108,7 +134,78 @@ nav .dropdown:hover .dropdown-content {
     display: block;
 }
 
+
 /* Add padding to the content to prevent it from being overlapped by the navigation bar */
 .content {
-    padding-top: 60px; /* Adjust this value as needed */
+    padding-top: 40px; 
+}
+
+
+/* Define CSS classes for buttons */
+.custom-button {
+    background-color: #0077b6;
+    color: #0077b6;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Define a class for the hidden button */
+.hidden-button {
+    display: none;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.home-container h1 {
+    color: #0077b6;
+    font-weight: 400;
+    font-size: 100px;
+    padding-bottom: 100 px ;
+    justify-content: center;
+}
+
+.background-image {
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    padding: 100%;
+    width: 100%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent overlay for better text readability */
+    color: white;
+}
+
+
+.background-image h1 {
+    color: white;
+    font-weight: 400;
+    font-size: 35px;
+}
+
+.background-color {
+    background-color: #0077b6; /* Replace with the background color you desire */
+    text-align: center;
+    padding: 50px;
+    color: white;
+}
+
+
+/* CSS for the footer */
+.footer {
+    background-color: #0077b6; /* Background color for the footer */
+    color: white; /* Text color for the footer content */
+    padding: 20px; /* Padding around the footer content */
+    text-align: center; /* Center align the content */
+    position: fixed; /* Set the position to fixed */
+    bottom: 0; /* Position it at the bottom of the viewport */
+    width: 100%; /* Full width of the viewport */
 }

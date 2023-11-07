@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import random
 
 class Tenant(models.Model):
     room_number = models.CharField(max_length=10)
@@ -23,7 +24,7 @@ class Payment(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transaction_id = models.CharField(max_length=100)
-    payment_method = models.CharField(choices=PAYMENT_METHOD, max_length=100)
+    payment_method = models.CharField(choices=PAYMENT_METHOD, max_length=100, default='Mpesa')
     amount = models.CharField(max_length=10)
     status = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,12 +45,14 @@ class Order(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
-    order_number = models.IntegerField(default=1000)
+    order_number = models.CharField(max_length=10, default=f'100{random.randint(100000, 999999)}')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, blank=True)
+    room_number = models.CharField(max_length=10)
     email = models.EmailField(max_length=50)
     city = models.CharField(max_length=50)
+    total = models.FloatField()
     payment_method = models.CharField(max_length=25)
     status = models.CharField(max_length=15, choices=STATUS, default='New')
     is_ordered = models.BooleanField(default=False)
@@ -62,12 +65,12 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.order_number:
-            # Calculate the next order number
-            last_order = Order.objects.order_by('-order_number').first()
-            if last_order:
-                self.order_number = last_order.order_number + 1
-            else:
-                self.order_number = 1000
+            # Generate a unique order number for each order
+            while True:
+                order_number = random.randint(100000, 999999)
+                if not Order.objects.filter(order_number=order_number).exists():
+                    self.order_number = order_number
+                    break
         super(Order, self).save(*args, **kwargs)
 
     def __str__(self):

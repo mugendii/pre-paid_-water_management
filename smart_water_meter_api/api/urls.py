@@ -12,5 +12,6 @@ urlpatterns = [
     # path('confirm_payment/<int:order_id>/', views.confirm_payment, name='confirm_payment'),
     path('order_complete', views.order_complete, name='order_complete'),
     path('confirm_order/', views.confirm_order, name='confirm_order'),
+    path('success/', views.success_view, name='success'),
 ]
 

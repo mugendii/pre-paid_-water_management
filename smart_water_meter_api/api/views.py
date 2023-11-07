@@ -23,6 +23,10 @@ class HomeView(TemplateView):
     template_name = 'api/home.html'
 
 
+def success_view(request):
+    # Your successful action logic here
+    return render(request, 'api/success.html')
+
 def register_tenant(request):
     if request.method == 'POST':
         form = TenantRegistrationForm(request.POST)
@@ -52,16 +56,20 @@ def register_tenant(request):
 
 
 
-@csrf_exempt
+# @csrf_exempt
 def esp_endpoint(request):
-    if request.method == 'POST':
-        # Handle data from the ESP and control solenoid valve
-        data = request.POST
-        # Compare values and control the solenoid valve
+    # esp32_ip = "esp32-local-ip"  # To be replced with the local IP of ESP32
+    # esp32_port = 80  # Assuming the default HTTP port
 
-    # Return a response to the ESP
-    response_data = {"message": "Data received and processed"}
-    return JsonResponse(response_data)
+    # esp32_url = f"http://{esp32_ip}:{esp32_port}/restart"
+    # response = requests.get(esp32_url)
+
+    # if response.status_code == 200:
+    #     return HttpResponse("Payment Succesful Valve Opened")
+    # else:
+    #     return HttpResponse("Payment Succesful !!!", status=500)
+
+    return HttpResponse("Payment Succesful Valve Opened")
 
 
 @receiver(post_save, sender=Payment)

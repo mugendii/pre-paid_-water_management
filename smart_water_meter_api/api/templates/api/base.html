@@ -10,22 +10,12 @@
 <body>
     <nav>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li class="dropdown">
-                
-                <a href="javascript:void(0)" class="dropbtn" >|||</a>
-                <div class="dropdown-content">
-                    <a href="{% url 'register' %}">Register Tenant</a>
-                    <a href="{% url 'place_order' %}">Pay for Tokens</a>
-                    <a href="{% url 'esp' %}">ESP Endpoint</a>
-                    <a href="{% url 'room_meter_association' %}">Room-Meter Association</a>
-                    <a href="{% url 'enter_meter_number' %}">Enter Meter Number</a>
-                </div>
-            </li>
+            {% include 'api/navbar.html' %} 
         </ul>
     </nav>
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+    {% include 'api/footer.html' %}
 </body>
 </html>

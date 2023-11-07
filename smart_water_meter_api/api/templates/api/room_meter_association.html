@@ -1,10 +1,10 @@
-{% extends 'api/base.html' %}
+{% extends 'api/main.html' %}
 
 {% block title %}Enter Room-Meter Association{% endblock %}
 
 {% block content %}
-    <h1>Enter Room-Meter Association</h1>
-    <form method="post">
+    <h2>Enter Room-Meter Association</h2>
+    <form method="post" class="form bg-gray-300 flex font-sans text-sm font-bold">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Save Association">

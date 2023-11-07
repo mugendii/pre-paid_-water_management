@@ -54,7 +54,10 @@
     <title>Prepay For Water</title>
   </head>
   <body>
-    {% include 'api/navbar.html' %} {% block content %} {% endblock content %}
+    {% include 'api/navbar.html' %} 
+    {% block content %}
+    {% endblock content %}
+    {% include 'api/footer.html' %}
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{% static 'fontawesomefree/js/fontawesome.js' %}"></script>
     <script src="{% static 'fontawesomefree/js/solid.js' %}"></script>
