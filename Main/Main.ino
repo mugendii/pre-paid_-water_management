@@ -2,8 +2,6 @@
 #include <HTTPClient.h>
 
 
-
-
 #define redLedPin 2
 #define yellowLedPin 22
 #define greenLedPin 23
@@ -21,7 +19,7 @@ float volume = 0.0; // in milliliters
 const float calibrationFactor = 7.5; // You need to calibrate this value based on your sensor and setup
 
 
-
+WiFiServer server(80);
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -53,11 +51,12 @@ void setup() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 
-    
+    server.begin();
 
 }
 
 void loop() {
+  runHTTPserver();
   // put your main code here, to run repeatedly:
   digitalWrite(SolenoidPin, LOW);
   // Calculate the volume based on calibration factor
@@ -70,13 +69,14 @@ void loop() {
   if (volume > 1000.0) {
     pay();
   } else if(volume> 750) {
-    lowlevel();
+    Lowlevel();
   }
   else if(volume> 500) {
     midlevel();
   }
   else  {
     high();
+  }
 }
 
 void countPulse() {
@@ -114,4 +114,45 @@ void pay(){
   digitalWrite(redLedPin, HIGH);
   digitalWrite(SolenoidPin, HIGH);
 
+}
+
+void runHTTPserver(){
+  WiFiClient client = server.available();   // listen for incoming clients
+
+  if(client){
+    Serial.println("New Client.");
+    while (client.connected()){
+      String request;
+      if(client.available()){ //receive client request
+        request = client.readString();
+        Serial.println(request);
+      }
+      String identifier = "Command: ";
+      String command;
+      if(request.indexOf(identifier)>0){
+        //extract actual command
+        int charIndex = request.indexOf(identifier)+identifier.length();
+        while(request.charAt(charIndex)!='\r'){
+          command+=request.charAt(charIndex);
+          charIndex++;
+        }
+        //send response
+        client.println("HTTP/1.1 200 OK");
+        client.println("Content-type:text/json");
+        client.println();//end of header
+        
+        if(command=="Test")
+          client.print("{\"Test\":\"Hello server\"}");
+        else if(command=="OFF"){
+          client.print("{\"Response\":\"Light OFF\"}");
+        }
+        else
+          client.print("{\"Error\":\"Command does not exist\"}");
+        
+        client.println();//end of response
+        break;
+      }
+    }
+    
+  }
 }
