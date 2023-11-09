@@ -1,11 +1,11 @@
 <!-- register_tenant.html -->
-{% extends 'api/base.html' %}
+{% extends 'api/main.html' %}
 
 {% block title %}Register Tenant{% endblock %}
 
 {% block content %}
-<h1>Register Tenant</h1>
-<form method="post">
+<h2>Register Tenant</h2>
+<form method="post" class="form bg-gray-300 flex font-sans text-sm font-bold">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Register">

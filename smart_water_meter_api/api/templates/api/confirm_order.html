@@ -3,7 +3,7 @@
   <div >
     <div class="w-[100%] p-4 bg-white rounded-l-lg shadow-lg">
       <div class="title mb-20">
-        <h4 class="text-2xl"><b>Review your billing address</b></h4>
+        <h4 class="text-2xl"><b>Review your billing data</b></h4>
         <p class="text-gray-500">Please review your billing address below.</p>
         <p class="text-gray-500">Order Name:{{order.name}}</p>
         <hr class="my-5" />
@@ -11,25 +11,31 @@
         <hr class="my-5" />
         <p class="text-gray-500">Phone:{{order.phone}}</p>
         <hr class="my-5" />
+        <p class="text-gray-500">Room Number:{{order.room_number}}</p>
+        <hr class="my-5" />
         <p class="text-gray-500">City:{{order.city}}</p>
         <hr class="my-5" />
-        <a href="{% url 'place_order' %}" class="text-blue-500">Edit</a>
+        <p class="text-gray-500">Total:{{order.total}}</p>
+        <hr class="my-5" />
+        <a href="{% url 'place_order' %}" class="text-blue-500">Edit</a> <br><br>
 
-        <button
-        type="button"
-        id="payButton"
-        class="text-blue-500"
-        onclick="triggerPayment()"
-        >
-        Pay now
+        <button type="button"
+         id="payButton"
+         class="custom-button"
+         onclick="triggerPayment()"
+         >
+         Pay now
         </button>
-        <button
-        type="button"
+        <!-- <button type="button" 
         id="confirmPaymentButton"
-        class="text-blue-500"
-        style="display: none"
-        onclick="checkPayment()"
-        >
+        class="custom-button hidden-button" 
+        onclick="checkPayment()">
+        Confirm Payment
+        </button> -->
+        <button type="button" 
+        id="confirmPaymentButton"
+        class="custom-button hidden-button" 
+        onclick="restartESP32()">
         Confirm Payment
         </button>
     </div>
@@ -37,13 +43,15 @@
 </div>
 
 <script>
+
+let total = parseFloat("{{ order.total }}");
 function triggerPayment(){
     fetch("https://api.chpter.co/v1/initiate/mpesa-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Api-Key":
-            "placeholder",
+            "pk_0b00000000000000000000000000000000000s",
         },
         body: JSON.stringify({
           customer_details: {
@@ -64,12 +72,12 @@ function triggerPayment(){
             currency: "KES",
             delivery_fee: 0.00,
             discount_fee: 0.00,
-            total: 1.00,
+            total: total,
           },
           callback_details: {
             notify_customer: true,
             transaction_reference: "{{ order.order_number }}",
-            callback_url: "placeholder",
+            callback_url: "https://example.com/link",
           },
         }),
       })
@@ -89,8 +97,27 @@ function triggerPayment(){
         });
   }
 
+
+  function restartESP32() {
+        // Make an HTTP GET request to the esp endpoint
+        fetch("http://127.0.0.1:8000/esp/")
+            .then(response => {
+                if (response.status === 200) {
+                    alert("Request sent successfully.");
+                } else {
+                    alert("Failed !!!.");
+                }
+
+            })
+            .catch(error => {
+                console.error("Error: " + error);
+            });
+    }
+
+
+
    function checkPayment() {
-    fetch("placeholder")
+    fetch("https://example.com/link")
       .then((res) => res.json())
       .then((data) => {
         let orderFound = false;
@@ -109,12 +136,14 @@ function triggerPayment(){
             document.getElementById("spinner").classList.remove("hidden");
 
           }
+          console.log("Payment cancelled");
         });
 
 
         if (!orderFound) {
           setTimeout(checkPayment, 5000);
         }
+        console.log("Payment failed");
       });
   }
   function sendTransaction(transaction_id, payment_method, status) {

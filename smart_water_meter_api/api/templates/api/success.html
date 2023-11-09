@@ -1,0 +1,8 @@
+{% extends 'api/main.html' %}
+{% block content %}
+<div class="success-message">
+    <h2>Success!</h2>
+    <p>Your action was completed successfully.</p> <br><br>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

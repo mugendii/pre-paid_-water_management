@@ -11,7 +11,7 @@ def generate_order_number(pk):
 
 def check_callback(order):
     desired_transaction = order.order_number
-    callback_url = 'placeholder'
+    callback_url = 'https://example.com/link'
     
     while True:
         all_transactions = requests.get(callback_url)
