@@ -4,8 +4,8 @@
 
 #define ledPin 4
 
-const char *ssid = "iPIC-WIRELESS";
-const char *password = "987654321jica";
+const char *ssid = "MUGI";
+const char *password = "AquaCoin";
 const char *serverIP = "192.168.x.x"; // Replace with your Django server's IP
 const int serverPort = 8000; // Replace with your Django server's port
 
