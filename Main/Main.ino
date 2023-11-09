@@ -1,5 +1,6 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <WebServer.h>
 
 
 
@@ -21,7 +22,7 @@ float volume = 0.0; // in milliliters
 const float calibrationFactor = 7.5; // You need to calibrate this value based on your sensor and setup
 
 
-
+WiFiServer server(80);
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -52,12 +53,16 @@ void setup() {
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
-
-    
-
+  
+  
+  server.on("/", handle_root);
+  server.begin();
+  Serial.println("HTTP server started");
+  delay(100); 
 }
 
 void loop() {
+  server.handleClient();
   // put your main code here, to run repeatedly:
   digitalWrite(SolenoidPin, LOW);
   // Calculate the volume based on calibration factor
@@ -78,7 +83,10 @@ void loop() {
   else  {
     high();
 }
-
+// Handle root url (/)
+void handle_root() {
+  server.send(200, "text/html", HTML);
+}
 void countPulse() {
   // Increment the pulse count when a pulse is detected
   pulseCount++;
