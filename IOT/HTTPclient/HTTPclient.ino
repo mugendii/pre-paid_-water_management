@@ -34,7 +34,7 @@ void loop() {
       String payload = http.getString();
       Serial.println("Response: " + payload);
 
-      digitalWrite(ledPin HIGH);
+      digitalWrite(ledPin, HIGH);
     } else {
       Serial.println("HTTP request failed");
     }
