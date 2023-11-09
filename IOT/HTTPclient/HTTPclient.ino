@@ -2,10 +2,10 @@
 #include <HTTPClient.h>
 
 
-#define ledPin 23
+#define ledPin 4
 
-const char *ssid = "your-ssid";
-const char *password = "your-password";
+const char *ssid = "iPIC-WIRELESS";
+const char *password = "987654321jica";
 const char *serverIP = "192.168.x.x"; // Replace with your Django server's IP
 const int serverPort = 8000; // Replace with your Django server's port
 
