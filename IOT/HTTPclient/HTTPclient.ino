@@ -2,7 +2,7 @@
 #include <HTTPClient.h>
 
 
-#define ledPin 4
+#define ledPin 39
 
 const char *ssid = "MUGI";
 const char *password = "AquaCoin";
@@ -11,7 +11,7 @@ const int serverPort = 8000; // Replace with your Django server's port
 
 void setup() {
   Serial.begin(115200);
-
+  pinMode(ledPin, OUTPUT);
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -22,6 +22,7 @@ void setup() {
 }
 
 void loop() {
+  digitalWrite(ledPin, HIGH);
   if (WiFi.status() == WL_CONNECTED) {
     // Make a GET request to your Django server
     HTTPClient http;

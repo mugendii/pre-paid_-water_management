@@ -12,7 +12,8 @@
 
 const char* ssid     = "iPIC-WIRELESS";
 const char* password = "987654321jica";
-
+const char *serverIP = "192.168.x.x"; // Replace with your Django server's IP
+const int serverPort = 8000; // Replace with your Django server's port
 
 volatile unsigned int pulseCount = 0;
 float volume = 0.0; // in milliliters
@@ -51,32 +52,14 @@ void setup() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 
-    server.begin();
+    //server.begin();
 
 }
 
 void loop() {
-  runHTTPserver();
+  //runHTTPserver();
   // put your main code here, to run repeatedly:
-  digitalWrite(SolenoidPin, LOW);
-  // Calculate the volume based on calibration factor
-  volume = pulseCount * calibrationFactor;
   
-  Serial.print("Volume: ");
-  Serial.print(volume);
-  Serial.println(" mL");
-  
-  if (volume > 1000.0) {
-    pay();
-  } else if(volume> 750) {
-    Lowlevel();
-  }
-  else if(volume> 500) {
-    midlevel();
-  }
-  else  {
-    high();
-  }
 }
 
 void countPulse() {
@@ -116,7 +99,7 @@ void pay(){
 
 }
 
-void runHTTPserver(){
+/*void runHTTPserver(){
   WiFiClient client = server.available();   // listen for incoming clients
 
   if(client){
@@ -155,4 +138,72 @@ void runHTTPserver(){
     }
     
   }
+}*/
+
+void one(){
+  // put your main code here, to run repeatedly:
+  digitalWrite(SolenoidPin, LOW);
+  // Calculate the volume based on calibration factor
+  volume = pulseCount * calibrationFactor;
+  
+  Serial.print("Volume: ");
+  Serial.print(volume);
+  Serial.println(" mL");
+  
+  if (volume > 1000.0) {
+    pay();
+  } else if(volume> 750) {
+    Lowlevel();
+  }
+  else if(volume> 500) {
+    midlevel();
+  }
+  else  {
+    high();
+  }
+}
+void two(){
+  // put your main code here, to run repeatedly:
+  digitalWrite(SolenoidPin, LOW);
+  // Calculate the volume based on calibration factor
+  volume = pulseCount * calibrationFactor;
+  
+  Serial.print("Volume: ");
+  Serial.print(volume);
+  Serial.println(" mL");
+  
+  if (volume > 2000.0) {
+    pay();
+  } else if(volume> 1750) {
+    Lowlevel();
+  }
+  else if(volume> 1000) {
+    midlevel();
+  }
+  else  {
+    high();
+  }
+}
+void three(){
+  // put your main code here, to run repeatedly:
+  digitalWrite(SolenoidPin, LOW);
+  // Calculate the volume based on calibration factor
+  volume = pulseCount * calibrationFactor;
+  
+  Serial.print("Volume: ");
+  Serial.print(volume);
+  Serial.println(" mL");
+  
+  if (volume > 3000.0) {
+    pay();
+  } else if(volume> 2750) {
+    Lowlevel();
+  }
+  else if(volume> 1500) {
+    midlevel();
+  }
+  else  {
+    high();
+  }
+}
 }
