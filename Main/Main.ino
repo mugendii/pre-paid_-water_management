@@ -66,15 +66,6 @@ void countPulse() {
   // Increment the pulse count when a pulse is detected
   pulseCount++;
 }
-
-
-void high(){
-  digitalWrite(greenLedPin, HIGH);
-}
-void midlevel(){
-  digitalWrite(yellowLedPin, HIGH);
-
-}
 void Lowlevel(){
   digitalWrite(redLedPin, HIGH);
   digitalWrite(buzzerPin, HIGH);
@@ -141,7 +132,7 @@ void pay(){
 }*/
 
 void one(){
-  // put your main code here, to run repeatedly:
+  
   digitalWrite(SolenoidPin, LOW);
   // Calculate the volume based on calibration factor
   volume = pulseCount * calibrationFactor;
@@ -156,10 +147,10 @@ void one(){
     Lowlevel();
   }
   else if(volume> 500) {
-    midlevel();
+    digitalWrite(yellowLedPin, HIGH);
   }
   else  {
-    high();
+    digitalWrite(greenLedPin, HIGH);
   }
 }
 void two(){
@@ -178,10 +169,10 @@ void two(){
     Lowlevel();
   }
   else if(volume> 1000) {
-    midlevel();
+    digitalWrite(yellowLedPin, HIGH);
   }
   else  {
-    high();
+    digitalWrite(greenLedPin, HIGH);
   }
 }
 void three(){
@@ -200,10 +191,10 @@ void three(){
     Lowlevel();
   }
   else if(volume> 1500) {
-    midlevel();
+    digitalWrite(yellowLedPin, HIGH);
   }
   else  {
-    high();
+    digitalWrite(greenLedPin, HIGH);
   }
 }
-}
+
