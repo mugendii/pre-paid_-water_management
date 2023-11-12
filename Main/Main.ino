@@ -56,12 +56,6 @@ void setup() {
 
 }
 
-void loop() {
-  //runHTTPserver();
-  // put your main code here, to run repeatedly:
-  
-}
-
 void countPulse() {
   // Increment the pulse count when a pulse is detected
   pulseCount++;
@@ -198,3 +192,62 @@ void three(){
   }
 }
 
+void loop() {
+  //runHTTPserver();
+  // put your main code here, to run repeatedly:
+  if (WiFi.status() == WL_CONNECTED) {
+    // Make a GET request to your Django server
+    HTTPClient http;
+    String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/one";
+    
+    http.begin(url);
+    int httpCode = http.GET();
+
+    if (httpCode > 0) {
+      String payload = http.getString();
+      Serial.println("Response: " + payload);
+
+      one();
+    } else {
+      Serial.println("HTTP request failed");
+    }
+
+    http.end();
+ 
+    // Make a GET request to your Django server
+    HTTPClient http;
+    String url2 = "http://" + String(serverIP) + ":" + String(serverPort) + "/two";
+    
+    http.begin(url2);
+    int httpCode = http.GET();
+
+    if (httpCode > 0) {
+      String payload = http.getString();
+      Serial.println("Response: " + payload);
+
+      two();
+    } else {
+      Serial.println("HTTP request failed");
+    }
+
+    http.end();
+  
+    // Make a GET request to your Django server
+    HTTPClient http;
+    String url3 = "http://" + String(serverIP) + ":" + String(serverPort) + "/three";
+    
+    http.begin(url3);
+    int httpCode = http.GET();
+
+    if (httpCode > 0) {
+      String payload = http.getString();
+      Serial.println("Response: " + payload);
+
+      three();
+    } else {
+      Serial.println("HTTP request failed");
+    }
+
+    http.end();
+  }
+}
