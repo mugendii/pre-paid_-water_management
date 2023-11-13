@@ -1,13 +1,16 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+// 
+//#include <WebServer.h>
 
+int ledPin= 33;
 
-#define ledPin 39
-
-const char *ssid = "MUGI";
-const char *password = "AquaCoin";
-const char *serverIP = "192.168.x.x"; // Replace with your Django server's IP
+const char *ssid = "4";
+const char *password = "#defineOmaCollins'Net";
+const char *serverIP = "192.168.0.102"; // Replace with your Django server's IP
 const int serverPort = 8000; // Replace with your Django server's port
+// 
+//WebServer server(serverPort);
 
 void setup() {
   Serial.begin(115200);
@@ -24,11 +27,16 @@ void setup() {
 void loop() {
   digitalWrite(ledPin, HIGH);
   if (WiFi.status() == WL_CONNECTED) {
+    // 
+    //server.on("/esp_1", HTTP_GET, [](){Serial.println("Hooo");});
+    //server.begin();
+
     // Make a GET request to your Django server
     HTTPClient http;
-    String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/your-api-endpoint";
+    String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/esp_1/";
     
     http.begin(url);
+    //http._followRedirects(true);
     int httpCode = http.GET();
 
     if (httpCode > 0) {
@@ -36,6 +44,13 @@ void loop() {
       Serial.println("Response: " + payload);
 
       digitalWrite(ledPin, HIGH);
+      delay(100);
+      digitalWrite(ledPin, LOW);
+      delay(100);
+      digitalWrite(ledPin, HIGH);
+      delay(100);
+      digitalWrite(ledPin, LOW);
+      delay(100);
     } else {
       Serial.println("HTTP request failed");
     }
