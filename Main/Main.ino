@@ -201,9 +201,9 @@ void loop() {
     String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/one";
     
     http.begin(url);
-    int httpCode = http.GET();
+    int httpCode1 = http.GET();
 
-    if (httpCode > 0) {
+    if (httpCode1 > 0) {
       String payload = http.getString();
       Serial.println("Response: " + payload);
 
@@ -219,9 +219,9 @@ void loop() {
     String url2 = "http://" + String(serverIP) + ":" + String(serverPort) + "/two";
     
     http.begin(url2);
-    //int httpCode = http.GET();
+    int httpCode2 = http.GET();
 
-    if (httpCode > 0) {
+    if (httpCode2 > 0) {
       String payload = http.getString();
       Serial.println("Response: " + payload);
 
@@ -237,9 +237,9 @@ void loop() {
     String url3 = "http://" + String(serverIP) + ":" + String(serverPort) + "/three";
     
     http.begin(url3);
-    //int httpCode = http.GET();
+    int httpCode3 = http.GET();
 
-    if (httpCode > 0) {
+    if (httpCode3 > 0) {
       String payload = http.getString();
       Serial.println("Response: " + payload);
 
