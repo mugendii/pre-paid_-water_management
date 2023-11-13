@@ -215,11 +215,11 @@ void loop() {
     http.end();
  
     // Make a GET request to your Django server
-    HTTPClient http;
+    //HTTPClient http;
     String url2 = "http://" + String(serverIP) + ":" + String(serverPort) + "/two";
     
     http.begin(url2);
-    int httpCode = http.GET();
+    //int httpCode = http.GET();
 
     if (httpCode > 0) {
       String payload = http.getString();
@@ -233,11 +233,11 @@ void loop() {
     http.end();
   
     // Make a GET request to your Django server
-    HTTPClient http;
+    //HTTPClient http;
     String url3 = "http://" + String(serverIP) + ":" + String(serverPort) + "/three";
     
     http.begin(url3);
-    int httpCode = http.GET();
+    //int httpCode = http.GET();
 
     if (httpCode > 0) {
       String payload = http.getString();
