@@ -192,7 +192,7 @@ void three(){
   }
 }
 
-void loop() {
+void site() {
   //runHTTPserver();
   // put your main code here, to run repeatedly:
   if (WiFi.status() == WL_CONNECTED) {
@@ -250,4 +250,7 @@ void loop() {
 
     http.end();
   }
+}
+void loop(){
+  site();
 }
