@@ -4,7 +4,7 @@
 
 #define redLedPin 2
 #define yellowLedPin 22
-#define greenLedPin 23
+#define greenLedPin 33
 #define buzzerPin 18
 #define FlowSensor 25
 #define SolenoidPin 26
@@ -198,7 +198,7 @@ void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     // Make a GET request to your Django server
     HTTPClient http;
-    String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/one";
+    String url = "http://" + String(serverIP) + ":" + String(serverPort) + "/esp_1/";
     
     http.begin(url);
     int httpCode1 = http.GET();
@@ -216,7 +216,7 @@ void loop() {
  
     // Make a GET request to your Django server
     //HTTPClient http;
-    String url2 = "http://" + String(serverIP) + ":" + String(serverPort) + "/two";
+    String url2 = "http://" + String(serverIP) + ":" + String(serverPort) + "/esp_2/";
     
     http.begin(url2);
     int httpCode2 = http.GET();
@@ -234,7 +234,7 @@ void loop() {
   
     // Make a GET request to your Django server
     //HTTPClient http;
-    String url3 = "http://" + String(serverIP) + ":" + String(serverPort) + "/three";
+    String url3 = "http://" + String(serverIP) + ":" + String(serverPort) + "/esp_3/";
     
     http.begin(url3);
     int httpCode3 = http.GET();
