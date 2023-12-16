@@ -15,9 +15,17 @@ const char* password = "987654321jica";
 const char *serverIP = "192.168.x.x"; // Replace with your Django server's IP
 const int serverPort = 8000; // Replace with your Django server's port
 
-volatile unsigned int pulseCount = 0;
-float volume = 0.0; // in milliliters
-const float calibrationFactor = 7.5; // You need to calibrate this value based on your sensor and setup
+*The hall-effect flow sensor outputs pulses per second per litre/minute of flow.*/
+float calibrationFactor = 90; //You can change according to your datasheet
+
+volatile byte pulseCount =0;  
+
+float flowRate = 0.0;
+unsigned int flowMilliLitres =0;
+unsigned long totalMilliLitres = 0;
+
+unsigned long oldTime = 0;
+
 
 
 WiFiServer server(80);
@@ -29,7 +37,9 @@ void setup() {
     pinMode(greenLedPin, OUTPUT);      // set the LED pin mode
     pinMode(buzzerPin, OUTPUT);
     pinMode(FlowSensor, INPUT);
+    digitalWrite(FlowSensor, HIGH);
     pinMode(SolenoidPin, OUTPUT);
+    digitalWrite(FlowSensor, HIGH);
     delay(10);
 
     // We start by connecting to a WiFi network
@@ -52,14 +62,18 @@ void setup() {
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 
+    
+    /*The Hall-effect sensor is connected to pin 2 which uses interrupt 0. Configured to trigger on a FALLING state change (transition from HIGH
+  (state to LOW state)*/
+    
+    attachInterrupt(sensorInterrupt, pulseCounter, FALLING); //you can use Rising or Falling
+
+
     //server.begin();
-
 }
 
-void countPulse() {
-  // Increment the pulse count when a pulse is detected
-  pulseCount++;
-}
+
+
 void Lowlevel(){
   digitalWrite(redLedPin, HIGH);
   digitalWrite(buzzerPin, HIGH);
@@ -80,7 +94,7 @@ void Lowlevel(){
 }
 void pay(){
   digitalWrite(redLedPin, HIGH);
-  digitalWrite(SolenoidPin, HIGH);
+  digitalWrite(SolenoidPin, LOW);
 
 }
 
